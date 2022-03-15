@@ -27,7 +27,7 @@ class _HomeState extends State<Home> {
                   SizedBox(
                     width: 10.0,
                   ),
-                  Text("두통",
+                  Text("두통 ",
                       style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 20.0),
