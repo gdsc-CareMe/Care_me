@@ -1,16 +1,12 @@
 # care_me
+Flutter project.
 
-A new Flutter project.
+## team
+* 조예린
+* 김채린
+* 임효근
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## info
+* 약 정보 제공 
+* 알람 기능 제공
+* 주변 약국 맵 기능 제공
