@@ -1,3 +1,4 @@
+import 'package:care_me/pharmacy/ph_repositiory.dart';
 import 'package:flutter/material.dart';
 import 'package:care_me/screens/home.dart';
 //지도에 사용하는 dart파일들
@@ -24,15 +25,16 @@ class _PharmacyMapState extends State<PharmacyMap> {
   Completer<GoogleMapController> _controller = Completer();
 
   static CameraPosition _currentLocation = CameraPosition(
-      target: LatLng(37.48926299528938, 127.08181088280385), zoom: 14);
+      target: LatLng(36.7747747747747, 126.93671366081676), zoom: 14);
 
-  LatLng _center = LatLng(31.0, 51.0);
+  LatLng _center = LatLng(36.7747747747747, 126.93671366081676);
 
   final List<Marker> _markers = [];
   List<ph>? phs;
+  late PhProvider _phProvider;
 
   _getCurrentPos() async {
-    //현재위치  접근권한을 받기
+     //현재위치  접근권한을 받기
     bool serviceEnabled;
     LocationPermission permission;
 
@@ -53,16 +55,20 @@ class _PharmacyMapState extends State<PharmacyMap> {
           'Location permissions are permanently denied, we cannot request permissions.');
     }
 
+
     //현재 위치 받는 코드 (현재 폐기상태 우측 상단에 구글 기본제공 내 위치로 가는 버튼이 있어서)
     //다른 기능 구현 후에 더 처리 해볼 예정
     final Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
+    
+    
+    // _center = LatLng(position.latitude, position.longitude);
+    // _currentLocation = CameraPosition(
+    //     target: LatLng(position.latitude, position.longitude), zoom: 10);
+    
 
-    _currentLocation = CameraPosition(
-        target: LatLng(position.latitude, position.longitude), zoom: 10);
+    return _center = LatLng(position.latitude, position.longitude);
   }
-
-  PhProvider? _phProvider;
 
   //지도
   @override
@@ -71,41 +77,68 @@ class _PharmacyMapState extends State<PharmacyMap> {
     super.initState();
   }
 
+  @override
   Widget build(BuildContext context) {
-    // _phProvider = Provider.of<PhProvider>(context, listen: false);
+    print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+    print(_center);
+    _phProvider = Provider.of<PhProvider>(context, listen: false);
+    _phProvider.loadPhs(_center);
 
     return Scaffold(
-      appBar: AppBar(
-          backgroundColor: Colors.white,
-          elevation: 0.0,
-          title: Image.asset(
-            'image/logo.png',
-            width: 53,
+        appBar: AppBar(
+            backgroundColor: Colors.white,
+            elevation: 0.0,
+            title: Image.asset(
+              'image/logo.png',
+              width: 53,
+            ),
+            centerTitle: true),
+        body: SafeArea(
+          child: Consumer<PhProvider>(
+            builder: (context, provider, wideget) {
+              if (provider.phs.isNotEmpty) {
+                return _makeMap(provider.phs);
+              }
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            },
           ),
-          centerTitle: true),
-      body: GoogleMap(
-        mapType: MapType.normal,
-        initialCameraPosition: _currentLocation,
-        onMapCreated: (GoogleMapController controller) {
-          _controller.complete(controller);
-          addMarker(phs);
-        },
-        myLocationButtonEnabled: true,
-        myLocationEnabled: true,
-      ),
+        ));
+  }
+
+  // Google Map 생성
+  Widget _makeMap(List<ph> phs) {
+    for (int i = 0; i < phs.length; i++) {
+      addMarker(phs[i]);
+    }
+
+    return GoogleMap(
+      mapType: MapType.normal,
+      initialCameraPosition: _currentLocation,
+      onMapCreated: (GoogleMapController controller) {
+        _controller.complete(controller);
+      },
+      myLocationButtonEnabled: true,
+      myLocationEnabled: true,
     );
   }
 
   addMarker(ph _ph) {
     int id = Random().nextInt(100);
-
-    _phProvider?.loadPhs(_center);
-
+    //string은 null 형태일 수 없는데 ph안의 값은 nullable이니까 
+    //뒤에 !를 붙여서
+    
+    var yIsLat = double.parse(_ph.YPos!);
+    
+    var xIsLng = double.parse(_ph.XPos!);
     _markers.add(Marker(
-        position: LatLng(_ph.YPos!.toDouble(), _ph.XPos!.toDouble()),
+        position: LatLng(yIsLat, xIsLng),
         markerId: MarkerId(id.toString()),
         infoWindow: InfoWindow(
             title: '약국이름 : ${_ph.yadmNm}',
             snippet: '번호 : ${_ph.telno}\주소 : ${_ph.addr}')));
   }
+
+  
 }
