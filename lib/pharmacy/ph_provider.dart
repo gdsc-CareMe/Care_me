@@ -5,7 +5,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class PhProvider extends ChangeNotifier {
   //phRepository에 접근해서 데이터를 받아옴
-  ph_repositiory _phRepository = ph_repositiory();
+  final ph_repositiory _phRepository = ph_repositiory();
 
   List<ph> _phs = [];
   List<ph> get phs => _phs;
@@ -13,7 +13,8 @@ class PhProvider extends ChangeNotifier {
 
   //데이터로드
   loadPhs(LatLng num) async {
-    List<ph>? listPhs = await _phRepository.loadPhs(_YX);
+    List<ph>? listPhs = await _phRepository.loadPhs(num);
+    print(listPhs);
     _phs = listPhs!;
     notifyListeners();
   }
