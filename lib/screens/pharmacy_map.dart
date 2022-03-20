@@ -34,7 +34,7 @@ class _PharmacyMapState extends State<PharmacyMap> {
   late PhProvider _phProvider;
 
   _getCurrentPos() async {
-     //현재위치  접근권한을 받기
+    //현재위치  접근권한을 받기
     bool serviceEnabled;
     LocationPermission permission;
 
@@ -55,19 +55,17 @@ class _PharmacyMapState extends State<PharmacyMap> {
           'Location permissions are permanently denied, we cannot request permissions.');
     }
 
-
     //현재 위치 받는 코드 (현재 폐기상태 우측 상단에 구글 기본제공 내 위치로 가는 버튼이 있어서)
     //다른 기능 구현 후에 더 처리 해볼 예정
     final Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
-    
-    
+
     // _center = LatLng(position.latitude, position.longitude);
     // _currentLocation = CameraPosition(
     //     target: LatLng(position.latitude, position.longitude), zoom: 10);
-    
-
-    return _center = LatLng(position.latitude, position.longitude);
+    _center = LatLng(position.latitude, position.longitude);
+    print('11111113333333333444444444455555555555555');
+    return _center;
   }
 
   //지도
@@ -79,6 +77,7 @@ class _PharmacyMapState extends State<PharmacyMap> {
 
   @override
   Widget build(BuildContext context) {
+    _getCurrentPos();
     print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
     print(_center);
     _phProvider = Provider.of<PhProvider>(context, listen: false);
@@ -109,16 +108,24 @@ class _PharmacyMapState extends State<PharmacyMap> {
 
   // Google Map 생성
   Widget _makeMap(List<ph> phs) {
-    for (int i = 0; i < phs.length; i++) {
-      addMarker(phs[i]);
-    }
+    print(phs);
+    // for (int i = 0; i < phs.length; i++) {
+    //   print('************************addMark workding************************');
+    //   addMarker(phs[i]);
+    // }
 
     return GoogleMap(
       mapType: MapType.normal,
       initialCameraPosition: _currentLocation,
       onMapCreated: (GoogleMapController controller) {
         _controller.complete(controller);
+        for (int i = 0; i < phs.length; i++) {
+          print(
+              '************************addMark workding************************');
+          addMarker(phs[i]);
+        }
       },
+      markers: _markers.toSet(),
       myLocationButtonEnabled: true,
       myLocationEnabled: true,
     );
@@ -126,11 +133,12 @@ class _PharmacyMapState extends State<PharmacyMap> {
 
   addMarker(ph _ph) {
     int id = Random().nextInt(100);
-    //string은 null 형태일 수 없는데 ph안의 값은 nullable이니까 
+    //string은 null 형태일 수 없는데 ph안의 값은 nullable이니까
     //뒤에 !를 붙여서
-    
+    print(_ph.YPos);
+    print(_ph.XPos);
     var yIsLat = double.parse(_ph.YPos!);
-    
+
     var xIsLng = double.parse(_ph.XPos!);
     _markers.add(Marker(
         position: LatLng(yIsLat, xIsLng),
@@ -139,6 +147,4 @@ class _PharmacyMapState extends State<PharmacyMap> {
             title: '약국이름 : ${_ph.yadmNm}',
             snippet: '번호 : ${_ph.telno}\주소 : ${_ph.addr}')));
   }
-
-  
 }
