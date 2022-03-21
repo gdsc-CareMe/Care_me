@@ -11,6 +11,8 @@ import 'package:care_me/pharmacy/ph.dart';
 import 'package:care_me/pharmacy/ph_provider.dart';
 import 'package:provider/provider.dart';
 
+import 'package:care_me/pharmacy/ph_locationController.dart';
+import 'package:get/get.dart';
 import 'dart:async';
 import 'dart:math';
 
@@ -27,88 +29,55 @@ class _PharmacyMapState extends State<PharmacyMap> {
   static CameraPosition _currentLocation = CameraPosition(
       target: LatLng(36.7747747747747, 126.93671366081676), zoom: 14);
 
-  LatLng _center = LatLng(36.7747747747747, 126.93671366081676);
-
   final List<Marker> _markers = [];
   List<ph>? phs;
   late PhProvider _phProvider;
 
-  _getCurrentPos() async {
-    //현재위치  접근권한을 받기
-    bool serviceEnabled;
-    LocationPermission permission;
-
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      return Future.error('Location services are disabled');
-    }
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission == await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        return Future.error('Location permissions are denied');
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      return Future.error(
-          'Location permissions are permanently denied, we cannot request permissions.');
-    }
-
-    //현재 위치 받는 코드 (현재 폐기상태 우측 상단에 구글 기본제공 내 위치로 가는 버튼이 있어서)
-    //다른 기능 구현 후에 더 처리 해볼 예정
-    final Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
-
-    // _center = LatLng(position.latitude, position.longitude);
-    // _currentLocation = CameraPosition(
-    //     target: LatLng(position.latitude, position.longitude), zoom: 10);
-    _center = LatLng(position.latitude, position.longitude);
-    print('11111113333333333444444444455555555555555');
-    return _center;
-  }
-
   //지도
   @override
-  void initState() {
-    _getCurrentPos();
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
-    _getCurrentPos();
-    print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-    print(_center);
-    _phProvider = Provider.of<PhProvider>(context, listen: false);
-    _phProvider.loadPhs(_center);
+    return GetBuilder<LocationController>(builder: (controller) {
+      var currentPosition = controller.addr;
+      print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+      print(currentPosition);
+      _currentLocation = CameraPosition(target: currentPosition, zoom: 15);
+      _phProvider = Provider.of<PhProvider>(context, listen: false);
+      _phProvider.loadPhs(currentPosition);
 
-    return Scaffold(
-        appBar: AppBar(
-            backgroundColor: Colors.white,
-            elevation: 0.0,
-            title: Image.asset(
-              'image/logo.png',
-              width: 53,
+      return Scaffold(
+          appBar: AppBar(
+              backgroundColor: Colors.white,
+              elevation: 0.0,
+              title: Image.asset(
+                'image/logo.png',
+                width: 53,
+              ),
+              centerTitle: true),
+          body: SafeArea(
+            child: Consumer<PhProvider>(
+              builder: (context, provider, wideget) {
+                //map을 호출하기 전에 marker를 등록해주고 map을 호출해서 마커를 찍는다
+                for (int i = 0; i < provider.phs.length; i++) {
+                  print(
+                      '************************addMark workding************************');
+                  addMarker(provider.phs[i]);
+                }
+                if (provider.phs.isNotEmpty) {
+                  return _makeMap();
+                }
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              },
             ),
-            centerTitle: true),
-        body: SafeArea(
-          child: Consumer<PhProvider>(
-            builder: (context, provider, wideget) {
-              if (provider.phs.isNotEmpty) {
-                return _makeMap(provider.phs);
-              }
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            },
-          ),
-        ));
+          ));
+    });
   }
 
   // Google Map 생성
-  Widget _makeMap(List<ph> phs) {
-    print(phs);
+  Widget _makeMap() {
+    // print(phs);
     // for (int i = 0; i < phs.length; i++) {
     //   print('************************addMark workding************************');
     //   addMarker(phs[i]);
@@ -119,11 +88,11 @@ class _PharmacyMapState extends State<PharmacyMap> {
       initialCameraPosition: _currentLocation,
       onMapCreated: (GoogleMapController controller) {
         _controller.complete(controller);
-        for (int i = 0; i < phs.length; i++) {
-          print(
-              '************************addMark workding************************');
-          addMarker(phs[i]);
-        }
+        // for (int i = 0; i < phs.length; i++) {
+        //   print(
+        //       '************************addMark workding************************');
+        //   addMarker(phs[i]);
+        // }
       },
       markers: _markers.toSet(),
       myLocationButtonEnabled: true,
@@ -145,6 +114,6 @@ class _PharmacyMapState extends State<PharmacyMap> {
         markerId: MarkerId(id.toString()),
         infoWindow: InfoWindow(
             title: '약국이름 : ${_ph.yadmNm}',
-            snippet: '번호 : ${_ph.telno}\주소 : ${_ph.addr}')));
+            snippet: '번호 : ${_ph.telno}주소 : ${_ph.addr}')));
   }
 }

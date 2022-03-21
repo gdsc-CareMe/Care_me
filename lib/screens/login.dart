@@ -3,6 +3,12 @@ import 'package:care_me/screens/home.dart';
 import 'package:care_me/screens/signup.dart';
 import 'package:flutter/material.dart';
 
+//로그인 화면에서 위치 권한과 현재 위치를 얻은뒤 get메소드로 저장하기 위한 패키지
+import 'package:care_me/pharmacy/ph_location.dart';
+import 'package:care_me/pharmacy/ph_locationController.dart';
+import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
 
@@ -11,6 +17,17 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  LocationController _locationController = Get.put(LocationController());
+  LocationRepository _locationRepository = LocationRepository();
+  late LatLng currentPosition;
+
+  void initState() {
+    super.initState();
+    //접근권한 확인
+    _locationRepository.determinePosition();
+    locationCheck().then((value) async => {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -88,16 +105,19 @@ class _LoginState extends State<Login> {
                               ),
                               onPressed: () {
                                 setState(() {
-                                Navigator.of(context).pushReplacement(
-                                MaterialPageRoute(
-                                builder: (context) => const BottomBarPage(),
-                                ),
-                                );
+                                  Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const BottomBarPage(),
+                                    ),
+                                  );
                                 });
                               },
                             ),
                           ),
-                          SizedBox(height: 10.0,),
+                          SizedBox(
+                            height: 10.0,
+                          ),
 
                           //회원가입 버튼
                           ButtonTheme(
@@ -115,11 +135,11 @@ class _LoginState extends State<Login> {
                               ),
                               onPressed: () {
                                 setState(() {
-                                Navigator.of(context).pushReplacement(
-                                MaterialPageRoute(
-                                builder: (context) => const Signup(),
-                                ),
-                                );
+                                  Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute(
+                                      builder: (context) => const Signup(),
+                                    ),
+                                  );
                                 });
                               },
                             ),
@@ -131,5 +151,10 @@ class _LoginState extends State<Login> {
         ),
       ),
     );
+  }
+
+  Future locationCheck() async {
+    currentPosition = await _locationRepository.getCurrentLocation();
+    await _locationController.getPosition(currentPosition);
   }
 }
