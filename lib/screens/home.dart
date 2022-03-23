@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'login.dart';
 
 import 'medicines/painkiller/med1.dart';
 import 'medicines/painkiller/med2.dart';
@@ -46,6 +48,19 @@ class _HomeState extends State<Home> {
               'image/logo.png',
               width: 53,
             ),
+            actions: [
+            //로그아웃 버튼
+            IconButton(
+                onPressed: () async {
+                  FirebaseAuth.instance.signOut();
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) => Login()));
+                },
+                color: Color(0xffff8787),
+                icon: Icon(Icons.exit_to_app))
+          ],
             centerTitle: true),
         body: Container(
           child: ListView(

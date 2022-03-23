@@ -20,14 +20,13 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const Login(),
-      //home: const Saved(),
+      home: const Saved(),
     );
   }
 }
 
-//앱 재실행시 자동 로그인 -> 로그아웃 기능도 있어야지 사용 가능해서 제가 나중에 만들고 주석 풀게요
-/* class Saved extends StatefulWidget {
+//앱 재실행시 자동 로그인
+class Saved extends StatefulWidget {
   const Saved({Key? key}) : super(key: key);
 
   @override
@@ -44,4 +43,3 @@ class _SavedState extends State<Saved> {
     }
   }
 }
- */
