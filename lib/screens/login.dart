@@ -6,6 +6,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+//로그인 화면에서 위치 권한과 현재 위치를 얻은뒤 get메소드로 저장하기 위한 패키지
+import 'package:care_me/pharmacy/ph_location.dart';
+import 'package:care_me/pharmacy/ph_locationController.dart';
+import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
 
@@ -14,11 +20,24 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+
+  LocationController _locationController = Get.put(LocationController());
+  LocationRepository _locationRepository = LocationRepository();
+  late LatLng currentPosition;
+
   final _auth = FirebaseAuth.instance; //회원 인증 instance
   final _formKey = GlobalKey<FormState>(); //입력폼에 부여할 수 있는 글로벌 키
   final emailController = new TextEditingController(); //이메일 컨트롤러
   final pwController = new TextEditingController(); //비밀번호 컨트롤러
   final googleSign = GoogleSignIn();
+  
+  
+  void initState() {
+    super.initState();
+    //접근권한 확인
+    _locationRepository.determinePosition();
+    locationCheck().then((value) async => {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -126,8 +145,17 @@ class _LoginState extends State<Login> {
                                 style: TextStyle(
                                     fontSize: 18.0, color: Colors.white),
                               ),
-                              onPressed: () { //버튼을 누르면 로그인 처리 함수 호출
-                                signIn(emailController.text, pwController.text);
+
+                              onPressed: () {
+                                setState(() {
+                                  Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const BottomBarPage(),
+                                    ),
+                                  );
+                                });
+
                               },
                             ),
                           ),
@@ -169,6 +197,11 @@ class _LoginState extends State<Login> {
     );
   }
 
+
+  Future locationCheck() async {
+    currentPosition = await _locationRepository.getCurrentLocation();
+    await _locationController.getPosition(currentPosition);
+
   //로그인 처리 함수
   void signIn(String email, String password) async {
     //모든 입력폼의 형식이 맞으면 로그인 성공
@@ -183,5 +216,7 @@ class _LoginState extends State<Login> {
         Fluttertoast.showToast(msg: e.toString());
       }
     }
+
   }
+}
 }
