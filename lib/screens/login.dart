@@ -147,14 +147,7 @@ class _LoginState extends State<Login> {
                               ),
 
                               onPressed: () {
-                                setState(() {
-                                  Navigator.of(context).pushReplacement(
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          const BottomBarPage(),
-                                    ),
-                                  );
-                                });
+                                signIn(emailController.text, pwController.text);
 
                               },
                             ),
@@ -201,6 +194,7 @@ class _LoginState extends State<Login> {
   Future locationCheck() async {
     currentPosition = await _locationRepository.getCurrentLocation();
     await _locationController.getPosition(currentPosition);
+  }
 
   //로그인 처리 함수
   void signIn(String email, String password) async {
@@ -218,5 +212,4 @@ class _LoginState extends State<Login> {
     }
 
   }
-}
 }
