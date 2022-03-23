@@ -36,14 +36,26 @@ dependencies:
   cupertino_icons: ^1.0.2
   scroll_indicator: ^0.0.3
 
+
+  #지도 관련 패키지들
+  google_maps_flutter: ^2.1.2
+  geolocator: ^8.2.0
+  fluttertoast: ^8.0.9
+  get: ^4.6.1
+  
+  #api관련 패키지들
+  provider: ^6.0.1 # provider 패키지 추가
+  http: ^0.13.4 # http 패키지 추가
+  xml2json: ^5.3.2 # xml -> json 형식으로 변환 (json 형식의 데이터를 가져올 경우 필요없음)
+  
+
   firebase_core: ^1.12.0
   firebase_analytics: ^9.1.1
   cloud_firestore: ^3.1.9
-  
   firebase_auth: ^3.3.7
-  fluttertoast: ^8.0.8
   google_sign_in: ^5.2.3
   url_launcher: ^6.0.20
+
 
 dev_dependencies:
   flutter_test:
