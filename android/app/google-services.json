@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "657114618669",
+    "project_id": "careme-db",
+    "storage_bucket": "careme-db.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:657114618669:android:c151e795882cf8008a51a4",
+        "android_client_info": {
+          "package_name": "com.example.care_me"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "657114618669-21m4sal77gvaf791hf4cs6ovjjej0coo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.care_me",
+            "certificate_hash": "6c3a20d38d909effa68ff9cf76d3deb5eb344ae9"
+          }
+        },
+        {
+          "client_id": "657114618669-e814vih8jqd5p5ropmfqpq3n2j4dmmsf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDVkkSF3cszUENhi1L3V6p5eAM8XGbHjtQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "657114618669-e814vih8jqd5p5ropmfqpq3n2j4dmmsf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
