@@ -114,6 +114,6 @@ class _PharmacyMapState extends State<PharmacyMap> {
         markerId: MarkerId(id.toString()),
         infoWindow: InfoWindow(
             title: '약국이름 : ${_ph.yadmNm}',
-            snippet: '번호 : ${_ph.telno}주소 : ${_ph.addr}')));
+            snippet: '번호 : ${_ph.telno} / 주소 : ${_ph.addr}')));
   }
 }
