@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="default_web_client_id" translatable="false">657114618669-e814vih8jqd5p5ropmfqpq3n2j4dmmsf.apps.googleusercontent.com</string>
+    <string name="gcm_defaultSenderId" translatable="false">657114618669</string>
+    <string name="google_api_key" translatable="false">AIzaSyDVkkSF3cszUENhi1L3V6p5eAM8XGbHjtQ</string>
+    <string name="google_app_id" translatable="false">1:657114618669:android:c151e795882cf8008a51a4</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyDVkkSF3cszUENhi1L3V6p5eAM8XGbHjtQ</string>
+    <string name="google_storage_bucket" translatable="false">careme-db.appspot.com</string>
+    <string name="project_id" translatable="false">careme-db</string>
+</resources>

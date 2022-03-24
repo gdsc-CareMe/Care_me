@@ -169,7 +169,7 @@ class _SignupState extends State<Signup> {
                             minWidth: 400.0,
                             height: 50.0,
                             child: MaterialButton(
-                              color: const Color(0xff77a4a8),
+                              color: const Color(0xffff8585),
                               child: const Text(
                                 '회원가입',
                                 style: TextStyle(

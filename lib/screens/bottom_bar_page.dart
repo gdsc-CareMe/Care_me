@@ -17,7 +17,7 @@ class _BottomBarPageState extends State<BottomBarPage> {
   //하단바 항목 리스트
   final List<Widget> _screen = [
     const Home(),
-    const Alarm(),
+     Alarm(),
     const PharmacyMap()
   ];
 
