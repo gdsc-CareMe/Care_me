@@ -98,7 +98,7 @@ class _AlarmState extends State<Alarm> {
                       color: selected ? Color.fromARGB(255, 193, 224, 151) : Color.fromARGB(255, 157, 178, 214),
                       fontWeight: selected ? FontWeight.bold : FontWeight.bold,
                     ),
-                    child: Text('알림 예약'),
+                    child: Text(' 알림 예약 '),
                   ),
                 ),
               ),
